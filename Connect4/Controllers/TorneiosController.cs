@@ -61,6 +61,7 @@ namespace Connect4.Controllers
         {
             if (ModelState.IsValid)
             {
+                torneio.Dono = User.Identity.Name;
                 _context.Add(torneio);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -133,7 +134,10 @@ namespace Connect4.Controllers
             {
                 return NotFound();
             }
-
+            if (User.Identity.Name != torneio.Dono)
+            {
+                return Forbid();
+            }
             return View(torneio);
         }
 
@@ -143,6 +147,10 @@ namespace Connect4.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var torneio = await _context.Torneio.SingleOrDefaultAsync(m => m.Id == id);
+            if (User.Identity.Name != torneio.Dono)
+            {
+                return Forbid();
+            }
             _context.Torneio.Remove(torneio);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

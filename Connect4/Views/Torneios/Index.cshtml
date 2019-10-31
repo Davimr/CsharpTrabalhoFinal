@@ -35,11 +35,28 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.NomeTorneio)
                 </td>
+
                 <td>
-                    @Html.DisplayFor(modelItem => item.QuantidadeJogadores)
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        @Html.DisplayFor(modelItem => item.QuantidadeJogadores)
+                    }
+                    else
+                    {
+                        <span>***</span>
+                    }
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Inicio)
+                    @if (SignInManager.IsSignedIn(User) &&
+                        User.Identity.Name == item.Dono)
+                    {
+                        @Html.DisplayFor(modelItem => item.Inicio)
+                    }
+                    else
+                    {
+                        <span>***</span>
+                    }
+
                 </td>
                 <td>
 

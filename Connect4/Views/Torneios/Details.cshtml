@@ -1,8 +1,13 @@
 ﻿@model Connect4.Models.Torneio
 
-@{
-    ViewData["Title"] = "Details";
-}
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+    @{
+        ViewData["Title"] = "Details";
+    }
 
 <h2>Details</h2>
 
@@ -16,18 +21,24 @@
         <dd>
             @Html.DisplayFor(model => model.NomeTorneio)
         </dd>
+        @if (SignInManager.IsSignedIn(User))
+        {
         <dt>
             @Html.DisplayNameFor(model => model.QuantidadeJogadores)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.QuantidadeJogadores)
         </dd>
+        @if (Model.Dono == User.Identity.Name)
+        {
         <dt>
             @Html.DisplayNameFor(model => model.Inicio)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Inicio)
         </dd>
+        }
+        }
     </dl>
 </div>
 <div>

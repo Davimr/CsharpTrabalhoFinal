@@ -14,5 +14,7 @@ namespace Connect4.Models
         public int QuantidadeJogadores { get; set; }
 
         public DateTime Inicio { get; set; }
+
+        public String Dono { get; set; }
     }
 }
