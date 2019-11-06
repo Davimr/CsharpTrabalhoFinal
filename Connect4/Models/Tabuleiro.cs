@@ -7,13 +7,21 @@ namespace Connect4.Models
 {
     public class Tabuleiro
     {
-        private static int NUMERO_COLUNAS = 7;
-        private static int NUMERO_LINHAS = 6;
-        public int[,] RepresentacaoTabuleiro { get; set; }
+        public static int NUMERO_COLUNAS = 7;
+        public static int NUMERO_LINHAS = 6;
+        private static int NUMERO_JOGADORES = 2;
 
+        public int[,] RepresentacaoTabuleiro { get; set; }
+        
+        public int Turno { get; set; } = new Random().Next(1, 3);
+
+        public void AlternaTurno()
+        {
+            this.Turno = (this.Turno % NUMERO_JOGADORES) + 1;
+        }
         public Tabuleiro()
         {
-
+            this.RepresentacaoTabuleiro = new int[NUMERO_COLUNAS, NUMERO_LINHAS];
         }
 
         public Tabuleiro(int [,] repTabuleiro)
@@ -21,11 +29,30 @@ namespace Connect4.Models
             RepresentacaoTabuleiro = repTabuleiro;
         }
 
+        /// <summary>
+        /// Verifica se existe um vencedor no jogo.
+        /// </summary>
+        /// <returns>Retorna 1 caso o jogador 1 vença,
+        /// 2 caso o jogador 2 vença, -1 caso seja empate e 0
+        /// caso o jogo ainda não tenha terminado.</returns>
         public int Vencedor()
         {
+            int vencedor = 0;
+            //Verifica se existe um vencedor em alguma Coluna.
+            vencedor = VerificarVencedorColuna();
+            //Caso exista retorne o vencedor. Caso contrário continue verificando.
+            if (vencedor != 0)
+                return vencedor;
+            //Verificar se existe um vencedor em alguma linha.
+            vencedor = VerificarVencedorLinha();
+            if (vencedor != 0)
+                return vencedor;
+            vencedor = VerificarVencedorDiagonal();
+            if (vencedor != 0)
+                return vencedor;
+            if (isTudoOcupado())
+                return -1;
             return 0;
-            
-
         }
 
         public int VerificarVencedorColuna()
@@ -68,6 +95,10 @@ namespace Connect4.Models
 
         public void Jogar(int Jogador, int Posicao)
         {
+            if(Jogador!= this.Turno)
+            {
+                throw new ArgumentException($"Não é a vez do jogador {Jogador}");
+            }
             if(Posicao < 0)
             {
                 throw new ArgumentException("A posição não pode " +
@@ -85,6 +116,7 @@ namespace Connect4.Models
                 {
                     RepresentacaoTabuleiro[Posicao, linha] 
                         = Jogador;
+                    AlternaTurno();
                     return;
                 }
             } while (++linha < RepresentacaoTabuleiro.GetLength(1));
