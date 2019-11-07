@@ -9,16 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace Connect4.Controllers
 {
     [Produces("application/json")]
-    [Route("api/JogadorMaquinaAPI")]
+    [Route("api/JogadorMaquina")]
     public class JogadorMaquinaAPIController : Controller
     {
-        [HttpGet(Name ="Obter")]
-        [Route("Obter")]
-        public Tabuleiro ObterJogo()
-        {
-            Tabuleiro t = new Tabuleiro();
-            return t;
-        }
 
         [HttpPost(Name = "Calcular")]
         [Route("Calcular")]

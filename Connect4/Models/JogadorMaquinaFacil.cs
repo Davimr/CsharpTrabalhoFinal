@@ -15,3 +15,4 @@ namespace Connect4.Models
         }
     }
 }
+Class.cs

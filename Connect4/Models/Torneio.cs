@@ -10,6 +10,10 @@ namespace Connect4.Models
     {
         public int Id { get; set; }
 
+        public IList<Jogador> Jogadores { get; set; }
+
+        public IList<Jogo> Jogos { get; set; }
+
         [Display(Name ="Nome")]
         //Expressão regular. Primeira letra maíscula depois letras, números, espaços e '-'.
         [RegularExpression(@"^[A-Z]+[a-zA-Z0-9""'\s-]*$")]
@@ -34,5 +38,7 @@ namespace Connect4.Models
         [Display(Name = "Premiação")]
         [DataType(DataType.Currency)]
         public Decimal Premiacao { get; set; }
+
+
     }
 }
