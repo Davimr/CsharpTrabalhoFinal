@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Connect4.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Connect4.Controllers
 {
@@ -12,11 +15,28 @@ namespace Connect4.Controllers
     [Route("api/Jogo")]
     public class JogoAPIController : Controller
     {
+        private UserManager<ApplicationUser> _userManager { get; set; }
+        private SignInManager<ApplicationUser> _signInManager { get; set; }
+        private ILogger<ManageController> _logger { get; set; }
+
+        public JogoAPIController(
+          UserManager<ApplicationUser> userManager,
+          SignInManager<ApplicationUser> signInManager,
+          ILogger<ManageController> logger)
+        {
+            _userManager = userManager;
+            _signInManager = signInManager;           
+            _logger = logger;
+        }
+
         [HttpGet(Name = "Obter")]
         [Route("Obter")]
+        [Authorize]
         public Tabuleiro ObterJogo()
         {
             Tabuleiro t = new Tabuleiro();
+            //Obter usuario no usuário no servidor.
+            var user = _userManager.GetUserAsync(this.User).Result;
             return t;
         }
 

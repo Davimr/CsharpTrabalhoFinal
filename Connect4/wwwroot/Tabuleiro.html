@@ -63,7 +63,7 @@
 </head>
 <body>
     <h1>Jogo da velha</h1>
-    <button onclick="IniciarJogo()">Iniciar Jogo</button>
+    <button onclick="obterJogoServidor()">Iniciar Jogo</button>
 	<br/>
     <div id="Tabuleiro" class="tabuleiro">
 		
@@ -82,103 +82,57 @@
 		}else if(valor ==2 ){
 			posicaoDiv.classList.add('Jogador2');
 		}
-	}
-	function CriarTabuleiro(colunas, linhas){
-		tabuleiroDiv = document.getElementById("Tabuleiro");
-		for(var i=linhas-1;i>=0;i--){
-			var linhaDiv = CriarLinha(colunas);
-			linhaDiv.id = 'linha-'+i;
-			tabuleiroDiv.appendChild(linhaDiv);
-		}
-	}
-	function CriarLinha(colunas){
-		var linha = document.createElement('div');				
-		linha.classList.add('row');
-		for(var i=0;i<colunas;i++){
-			var posicaoDiv = document.createElement('div');	
-			posicaoDiv.id = 'posCol-'+i;
-			posicaoDiv.classList.add('square');
-			linha.appendChild(posicaoDiv);
-		}
-		
-		return linha;
-	}
-	CriarTabuleiro(7,6);
-	AtualizarPosicao(0,0,1);
-	AtualizarPosicao(0,1,2);
-	AtualizarPosicao(0,1,1);
-	AtualizarPosicao(0,2,2);
-	AtualizarPosicao(0,3,2);
-	AtualizarPosicao(0,3,0);
-	AtualizarPosicao(4,0,1);
-    /*var Tabuleiro;
-    function Jogar(posX, posY) {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-          ObterJogo();
         }
-    };
-        xhttp.open("GET",
-            "/api/JogoDaVelha/" + Tabuleiro.jogadorAtual + "/" + posX + "/" + posY, true);
-    xhttp.send();
+        function CriarLinha(colunas) {
+            var linha = document.createElement('div');
+            linha.classList.add('row');
+            for (var i = 0; i < colunas; i++) {
+                var posicaoDiv = document.createElement('div');
+                posicaoDiv.id = 'posCol-' + i;
+                posicaoDiv.classList.add('square');
+                linha.appendChild(posicaoDiv);
+            }
+
+            return linha;
         }
-        function IniciarJogo() {
-            var xhttp = new XMLHttpRequest();          
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    alert("Jogo Reiniciado!");
-                    ObterJogo();
+
+        function CriarTabuleiro(colunas, linhas) {
+            tabuleiroDiv = document.getElementById("Tabuleiro");
+            tabuleiroDiv.querySelectorAll('*').forEach(n => n.remove());
+            for (var i = linhas - 1; i >= 0; i--) {
+                var linhaDiv = CriarLinha(colunas);
+                linhaDiv.id = 'linha-' + i;
+                tabuleiroDiv.appendChild(linhaDiv);
+            }
+        }
+	
+
+
+    function obterJogoServidor() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.responseType = 'json'
+        var URLObterJogo = "api/Jogo/Obter"
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                MontarTabuleiro(this.response);
+            }
+        };
+        //Prepara uma chamada GET no Servidor.
+        xhttp.open("GET", URLObterJogo, true);
+        //Envia a chamada.
+        xhttp.send();
+        }
+
+        function MontarTabuleiro(Tabuleiro) {
+            var TamanhoColunas = Tabuleiro.representacaoTabuleiro.length,
+                TamanhoLinhas = Tabuleiro.representacaoTabuleiro[0].length;
+            CriarTabuleiro(TamanhoColunas, TamanhoLinhas);
+            for (coluna = 0; coluna < TamanhoColunas; coluna++) {
+                for (linha = 0; linha < TamanhoLinhas; linha++) {
+                    AtualizarPosicao(coluna, linha, Tabuleiro.representacaoTabuleiro[coluna][linha]);
                 }
-            };
-            xhttp.open("GET",
-                "/api/JogoDaVelha/Reset", true);
-            xhttp.send();
+            }
         }
-        function ObterJogo() {
-            var xhttp = new XMLHttpRequest();
-            xhttp.responseType = 'json';
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    Tabuleiro = this.response;
-                    for (var v = 0; v < 3; v++) {
-                        for (var h = 0; h < 3; h++) {
-                            var conteudo = document.querySelector("#s" + h + v).querySelector("#Conteudo");
-                            switch (Tabuleiro.tabuleiro[v][h]) {
-                                case 0:
-                                    if (conteudo.classList.contains("Jogador1")) {
-                                        conteudo.classList.remove("Jogador1");
-                                    }
-                                    if (conteudo.classList.contains("Jogador2")) {
-                                        conteudo.classList.remove("Jogador2");
-                                    }
-                                    break;
-                                case 1:
-                                    if (conteudo.classList.contains("Jogador2")) {
-                                        conteudo.classList.remove("Jogador2");
-                                    }
-                                    if (!conteudo.classList.contains("Jogador1")) {
-                                        conteudo.classList.toggle("Jogador1");
-                                    }
-                                    break;
-                                case 2:
-                                    if (conteudo.classList.contains("Jogador1")) {
-                                        conteudo.classList.remove("Jogador1");
-                                    }
-                                    if (!conteudo.classList.contains("Jogador2")) {
-                                        conteudo.classList.toggle("Jogador2");
-                                    }
-                                    break;
-                            }
-                        }
-                    }
-                }
-            };
-            xhttp.open("GET",
-                "/api/JogoDaVelha/", true);
-            xhttp.send();
-        }
-		*/
     </script>
 </body>
 </html>

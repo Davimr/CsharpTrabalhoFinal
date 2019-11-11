@@ -12,9 +12,10 @@ using System;
 namespace Connect4.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191111142307_Jogador")]
+    partial class Jogador
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,8 +41,6 @@ namespace Connect4.Data.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
 
-                    b.Property<string>("Nome");
-
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256);
 
@@ -61,8 +60,6 @@ namespace Connect4.Data.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
 
-                    b.Property<int?>("jogadorId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -72,8 +69,6 @@ namespace Connect4.Data.Migrations
                         .IsUnique()
                         .HasName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("jogadorId");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -264,13 +259,6 @@ namespace Connect4.Data.Migrations
                     b.ToTable("JogadorPessoa");
 
                     b.HasDiscriminator().HasValue("JogadorPessoa");
-                });
-
-            modelBuilder.Entity("Connect4.Models.ApplicationUser", b =>
-                {
-                    b.HasOne("Connect4.Models.Jogador", "jogador")
-                        .WithMany()
-                        .HasForeignKey("jogadorId");
                 });
 
             modelBuilder.Entity("Connect4.Models.Jogador", b =>

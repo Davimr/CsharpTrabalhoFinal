@@ -13,6 +13,6 @@ namespace Connect4.Models
 
             return jogada;
         }
+
     }
 }
-Class.cs

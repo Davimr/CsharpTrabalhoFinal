@@ -5,7 +5,10 @@ using System.Threading.Tasks;
 
 namespace Connect4.Models
 {
-    public class JogadorComputador: Jogador
+    public class JogadorComputador : Jogador
     {
+        public String URLServico { get; set; }
+
+        public String NomeComputador { get; set; }
     }
 }
