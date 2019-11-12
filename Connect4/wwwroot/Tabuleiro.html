@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Jogo da velha</title>
+    <title>Connect 4</title>
     <style type="text/css">
         body {
             text-align: center;
@@ -62,7 +62,7 @@
 
 </head>
 <body>
-    <h1>Jogo da velha</h1>
+    <h1>Connect-4</h1>
     <button onclick="obterJogoServidor()">Iniciar Jogo</button>
 	<br/>
     <div id="Tabuleiro" class="tabuleiro">
@@ -113,8 +113,14 @@
         xhttp.responseType = 'json'
         var URLObterJogo = "api/Jogo/Obter"
         xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                MontarTabuleiro(this.response);
+            if (this.readyState == 4) {
+                if (this.response == null &&
+                    this.responseURL != "") {
+                    window.location.replace(this.responseURL);
+                }
+                if (this.status == 200) {
+                    MontarTabuleiro(this.response);
+                }
             }
         };
         //Prepara uma chamada GET no Servidor.

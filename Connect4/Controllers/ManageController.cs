@@ -61,7 +61,9 @@ namespace Connect4.Controllers
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 IsEmailConfirmed = user.EmailConfirmed,
-                StatusMessage = StatusMessage
+                StatusMessage = StatusMessage,
+                Nome = user.Nome,
+                Nascimento = user.Nascimento
             };
 
             return View(model);

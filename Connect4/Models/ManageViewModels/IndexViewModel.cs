@@ -10,6 +10,13 @@ namespace Connect4.Models.ManageViewModels
     {
         public string Username { get; set; }
 
+        [Display(Name = "Nome")]
+        public String Nome { get; set; }
+
+        [Display(Name = "Data de Nascimento")]
+        [DataType(DataType.Date)]
+        public DateTime Nascimento { get; set; }
+
         public bool IsEmailConfirmed { get; set; }
 
         [Required]
