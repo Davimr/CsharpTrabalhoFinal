@@ -154,17 +154,7 @@ namespace TesteTabuleiro
             t = new Tabuleiro(valor);
             Assert.Equal(2, t.VerificarVencedorDiagonal());
             //Existe um vencedor na diagnoal. Posicao [4,0] até [1,3]
-            valor = new int[7, 6]{
-                {1,0,0,0,0,0},
-                {1,1,2,2,0,0},
-                {2,1,2,0,0,0},
-                {1,2,0,0,0,0},
-                {2,1,1,0,0,0},
-                {1,1,2,2,0,0},
-                {1,1,2,0,0,0},
-                };
-            t = new Tabuleiro(valor);
-            Assert.Equal(2, t.VerificarVencedorDiagonal());
+
             //Existe um vencedor na diagnoal. Posicao [0,0] até [3,3]
             valor = new int[7, 6]{
                 {1,0,0,0,0,0},
@@ -184,13 +174,13 @@ namespace TesteTabuleiro
                 {2,1,2,0,0,0},
                 {1,2,2,1,0,0},
                 {2,1,2,0,0,0},
-                {1,1,1,1,0,0},
+                {1,1,1,0,0,0},
                 {1,1,2,0,0,0},
                 };
             t = new Tabuleiro(valor);
-            Assert.Equal(0, t.VerificarVencedorDiagonal());
+            Assert.Equal(2, t.VerificarVencedorDiagonal());
             //Existe um vencedor na diagonal.
-            //Posição [6,1] até Posição [3,4]
+            //Posição [6,1]
             valor = new int[7, 6]{
                 {1,0,0,0,0,0},
                 {1,1,2,1,0,0},
@@ -201,7 +191,18 @@ namespace TesteTabuleiro
                 {1,1,2,0,0,0},
                 };
             t = new Tabuleiro(valor);
-            Assert.Equal(0, t.VerificarVencedorDiagonal());
+            Assert.Equal(1, t.VerificarVencedorDiagonal());
+            valor = new int[7, 6]{
+                {1,0,0,0,0,0},
+                {1,1,2,2,0,0},
+                {2,1,2,0,0,0},
+                {1,2,0,0,0,0},
+                {2,1,1,0,0,0},
+                {1,1,2,2,0,0},
+                {1,1,2,0,0,0},
+                };
+            t = new Tabuleiro(valor);
+            Assert.Equal(2, t.VerificarVencedorDiagonal());
         }
     }
 }
