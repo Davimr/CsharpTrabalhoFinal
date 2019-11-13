@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Connect4.Data;
 using Connect4.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -19,14 +20,18 @@ namespace Connect4.Controllers
         private SignInManager<ApplicationUser> _signInManager { get; set; }
         private ILogger<ManageController> _logger { get; set; }
 
+        private ApplicationDbContext _context { get; set; }
         public JogoAPIController(
           UserManager<ApplicationUser> userManager,
           SignInManager<ApplicationUser> signInManager,
-          ILogger<ManageController> logger)
+          ILogger<ManageController> logger,
+          ApplicationDbContext context
+          )
         {
             _userManager = userManager;
             _signInManager = signInManager;           
             _logger = logger;
+            _context = context;
         }
 
         [HttpGet(Name = "Obter")]
@@ -34,10 +39,26 @@ namespace Connect4.Controllers
         [Authorize]
         public Tabuleiro ObterJogo()
         {
-            Tabuleiro t = new Tabuleiro();
-            //Obter usuario no usuário no servidor.
-            var user = _userManager.GetUserAsync(this.User).Result;
+            Tabuleiro t = null;
+            try
+            {
+                t = new Tabuleiro();
+                _context.Tabuleiros.Add(t);
+                _context.SaveChanges();
+            }catch(Exception e)
+            {
+                _logger.LogCritical(e, e.Message, null);
+            }
             return t;
+        }
+
+
+        [HttpGet(Name = "Obter")]
+        [Route("Obter/{id}")]
+        [Authorize]
+        public Tabuleiro ObterJogo(int id)
+        {
+            return _context.Tabuleiros.Find(id);
         }
 
         [HttpPost(Name = "Vencedor")]
@@ -55,6 +76,8 @@ namespace Connect4.Controllers
             [FromQuery]int Pos)
         {
             t.Jogar(Jogador, Pos);
+            _context.Attach(t);
+            _context.SaveChanges();
             return t;
         }
     }
