@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -7,11 +10,61 @@ namespace Connect4.Models
 {
     public class Tabuleiro
     {
+        [Key]
+        public int Id { get; set; }
+
         public static int NUMERO_COLUNAS = 7;
         public static int NUMERO_LINHAS = 6;
         private static int NUMERO_JOGADORES = 2;
 
-        public int[][] RepresentacaoTabuleiro { get; set; }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// NotMapped Significa que o objeto não será persistido no Banco de Dados pela
+        /// Entity Framework.
+        [NotMapped]
+        public int[,] RepresentacaoTabuleiro { get; set; }
+
+
+        /// <summary>
+        /// Não é possível para o Entity Framework mapear um array multidimensional.
+        /// Por isso representamos ele como uma string de inteiros.
+        /// TAMANHOCOLUNA;TAMANHOLINHA;VALORES...
+        /// </summary>
+        /// jsonIgnore significa que o valor não será serializado no objeto JSON.
+        [JsonIgnore]
+        public string InternalData
+        {
+            get
+            {
+                String internalData = "";
+                internalData = RepresentacaoTabuleiro.GetLength(0).ToString() + ';' + RepresentacaoTabuleiro.GetLength(1).ToString() + ';';
+                for (var coluna = 0; coluna < RepresentacaoTabuleiro.GetLength(0); coluna++)
+                {
+                    for (var linha = 0; linha < RepresentacaoTabuleiro.GetLength(1); linha++)
+                    {
+                        internalData = RepresentacaoTabuleiro[coluna, linha] + ";";
+                    }
+                }
+                return internalData;
+            }
+            set
+            {
+                string internalData = value;
+                var valores = internalData.Split(';');
+                RepresentacaoTabuleiro = new int[int.Parse(valores[0]), int.Parse(valores[1])];
+                for (var coluna = 0; coluna < RepresentacaoTabuleiro.GetLength(0); coluna++)
+                {
+                    for (var linha = 0; linha < RepresentacaoTabuleiro.GetLength(0); linha++)
+                    {
+                        RepresentacaoTabuleiro[coluna, linha] = int.Parse(valores[2 + (coluna * RepresentacaoTabuleiro.GetLength(1)) + linha]);
+                    }
+                }
+            }
+        }
+
         
         public int Turno { get; set; } = new Random().Next(1, 3);
 
@@ -21,29 +74,24 @@ namespace Connect4.Models
         }
         public Tabuleiro()
         {
-            this.RepresentacaoTabuleiro = new int[NUMERO_COLUNAS][];
-            for(int coluna=0;coluna< NUMERO_COLUNAS; coluna++)
-            {
-                //Cria as posições em cada coluna.
-                this.RepresentacaoTabuleiro[coluna] = new int[NUMERO_LINHAS];
-            }
+            this.RepresentacaoTabuleiro = new int[NUMERO_COLUNAS, NUMERO_LINHAS];
         }
 
         public Tabuleiro(int [][] repTabuleiro)
         {
-            RepresentacaoTabuleiro = repTabuleiro;
+            RepresentacaoTabuleiro = new int[repTabuleiro.Length,repTabuleiro[repTabuleiro.Length-1].Length];
+            for (int coluna = 0; coluna < RepresentacaoTabuleiro.GetLength(0); coluna++)
+            {
+                for (int linha = 0; linha < repTabuleiro.GetLength(1); linha++)
+                {
+                    RepresentacaoTabuleiro[coluna, linha] = repTabuleiro[coluna][linha];
+                }
+            }
         }
         public Tabuleiro(int[,] repTabuleiro)
         {
-            RepresentacaoTabuleiro = new int[repTabuleiro.GetLength(0)][];
-            for(int coluna = 0; coluna< RepresentacaoTabuleiro.GetLength(0); coluna++)
-            {
-                this.RepresentacaoTabuleiro[coluna] = new int[repTabuleiro.GetLength(1)];
-                for(int linha =0; linha < repTabuleiro.GetLength(1); linha++)
-                {
-                    this.RepresentacaoTabuleiro[coluna][linha] = repTabuleiro[coluna, linha];
-                }                
-            }
+            RepresentacaoTabuleiro = repTabuleiro;
+            
         }
         /// <summary>
         /// Verifica se existe um vencedor no jogo.
@@ -73,18 +121,18 @@ namespace Connect4.Models
 
         public int VerificarVencedorColuna()
         {
-            for (int coluna = 0; coluna < RepresentacaoTabuleiro.Length; coluna++)
+            for (int coluna = 0; coluna < RepresentacaoTabuleiro.GetLength(0); coluna++)
             {
                 int contador=1;
                 for (int linha = 1; linha < 
-                    RepresentacaoTabuleiro[coluna].Length; 
+                    RepresentacaoTabuleiro.GetLength(1); 
                     linha++) { 
-                    if (RepresentacaoTabuleiro[coluna][ linha-1] == 0) { break;}
-                    if (RepresentacaoTabuleiro[coluna][linha] 
-                        == RepresentacaoTabuleiro[coluna][ linha-1])
+                    if (RepresentacaoTabuleiro[coluna, linha-1] == 0) { break;}
+                    if (RepresentacaoTabuleiro[coluna,linha] 
+                        == RepresentacaoTabuleiro[coluna, linha-1])
                     {
                         if (++contador == 4){
-                            return RepresentacaoTabuleiro[coluna][linha];
+                            return RepresentacaoTabuleiro[coluna,linha];
                         }
                     }else{
                         contador = 1;                    
@@ -100,8 +148,7 @@ namespace Connect4.Models
         public Boolean isTudoOcupado()
         {
             for(int i=0; i<RepresentacaoTabuleiro.GetLength(0);i++) {
-                if(RepresentacaoTabuleiro[i]
-                    [RepresentacaoTabuleiro[i].Length-1] == 0)
+                if(RepresentacaoTabuleiro[i,RepresentacaoTabuleiro.GetLength(1)-1] == 0)
                 {
                     return false;
                 }
@@ -128,9 +175,9 @@ namespace Connect4.Models
             int linha = 0;
             do
             {
-                if (RepresentacaoTabuleiro[Posicao][ linha] == 0)
+                if (RepresentacaoTabuleiro[Posicao, linha] == 0)
                 {
-                    RepresentacaoTabuleiro[Posicao][ linha] 
+                    RepresentacaoTabuleiro[Posicao, linha] 
                         = Jogador;
                     AlternaTurno();
                     return;
@@ -143,20 +190,20 @@ namespace Connect4.Models
 
         public int VerificarVencedorLinha()
         {
-            for (int linha = 0; linha < RepresentacaoTabuleiro[0].Length; linha++)
+            for (int linha = 0; linha < RepresentacaoTabuleiro.GetLength(1); linha++)
             {
                 int contador = 1;
                 for (int coluna = 1; coluna <
-                    RepresentacaoTabuleiro.Length;
+                    RepresentacaoTabuleiro.GetLength(0);
                     coluna++)
                 {
-                    if (RepresentacaoTabuleiro[coluna-1][linha] == 0) { break; }
-                    if (RepresentacaoTabuleiro[coluna][linha]
-                        == RepresentacaoTabuleiro[coluna-1][linha])
+                    if (RepresentacaoTabuleiro[coluna-1,linha] == 0) { break; }
+                    if (RepresentacaoTabuleiro[coluna,linha]
+                        == RepresentacaoTabuleiro[coluna-1,linha])
                     {
                         if (++contador == 4)
                         {
-                            return RepresentacaoTabuleiro[coluna][linha];
+                            return RepresentacaoTabuleiro[coluna,linha];
                         }
                     }
                     else
@@ -170,9 +217,9 @@ namespace Connect4.Models
 
         public int VerificarVencedorDiagonal()
         {
-            for (int coluna = 0; coluna < RepresentacaoTabuleiro.Length; coluna++)
+            for (int coluna = 0; coluna < RepresentacaoTabuleiro.GetLength(0); coluna++)
             {            
-                for (int linha = 0; linha < RepresentacaoTabuleiro[coluna].Length; linha++) { 
+                for (int linha = 0; linha < RepresentacaoTabuleiro.GetLength(1); linha++) { 
                     int resultado = VerificarDiagonal(coluna, linha);
                     if (resultado != 0)
                         return resultado;
@@ -183,36 +230,36 @@ namespace Connect4.Models
 
         private int VerificarDiagonal(int coluna, int linha )
         {
-            if (RepresentacaoTabuleiro[coluna][linha] == 0)
+            if (RepresentacaoTabuleiro[coluna,linha] == 0)
                 return 0;
-            if(linha +4 < this.RepresentacaoTabuleiro[0].Length)
+            if(linha +4 < this.RepresentacaoTabuleiro.GetLength(1))
             {
                 if (coluna - 4 >= 0)
                 {
                     int i = 1;
                     for (i = 1; i < 4; i++)
                     {
-                        if (RepresentacaoTabuleiro[coluna][linha] !=
-                            RepresentacaoTabuleiro[coluna - i][linha + i])
+                        if (RepresentacaoTabuleiro[coluna,linha] !=
+                            RepresentacaoTabuleiro[coluna - i,linha + i])
                             break;
                     }
                     if (i == 4)
                     {
-                        return RepresentacaoTabuleiro[coluna][linha];
+                        return RepresentacaoTabuleiro[coluna,linha];
                     }
                 }
-                if (coluna + 4 < this.RepresentacaoTabuleiro.Length)
+                if (coluna + 4 < this.RepresentacaoTabuleiro.GetLength(0))
                 {
                     int i = 1;
                     for (i = 1; i < 4; i++)
                     {
-                        if (RepresentacaoTabuleiro[coluna][linha] !=
-                            RepresentacaoTabuleiro[coluna + i][linha + i])
+                        if (RepresentacaoTabuleiro[coluna,linha] !=
+                            RepresentacaoTabuleiro[coluna + i,linha + i])
                             break;
                     }
                     if (i == 4)
                     {
-                        return RepresentacaoTabuleiro[coluna][linha];
+                        return RepresentacaoTabuleiro[coluna,linha];
                     }
                 }
 

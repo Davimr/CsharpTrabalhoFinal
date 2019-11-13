@@ -12,9 +12,10 @@ using System;
 namespace Connect4.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191113143639_TabuleiroJogo")]
+    partial class TabuleiroJogo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -138,7 +139,7 @@ namespace Connect4.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tabuleiros");
+                    b.ToTable("Tabuleiro");
                 });
 
             modelBuilder.Entity("Connect4.Models.Torneio", b =>
