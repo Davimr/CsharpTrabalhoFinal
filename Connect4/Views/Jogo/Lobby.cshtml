@@ -1,0 +1,25 @@
+﻿@model Jogo
+@{
+    ViewData["Title"] = "Lobby";
+}
+
+<h2>Lobby</h2>
+
+<span>Jogador 1:</span>
+@if (Model.Jogador1 == null)
+{
+    <span>-</span>
+}else{
+    @Model.Jogador1.Id
+}
+<span>Jogador 2:</span>
+@if (Model.Jogador2 == null)
+{
+    <span>-</span>
+}else{
+    @Model.Jogador2.Id
+}
+
+<a asp-area="" asp-controller="Jogo"
+   asp-action="Tabuleiro"
+   asp-route-id="@Model.Id">Iniciar Jogo</a>

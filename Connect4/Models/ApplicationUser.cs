@@ -15,6 +15,7 @@ namespace Connect4.Models
         [DataType(DataType.Date)]
         public DateTime Nascimento { get; set; }
 
-        public JogadorPessoa jogador { get; set; } = new JogadorPessoa();
+        public JogadorPessoa Jogador { get; set; } 
+            = new JogadorPessoa();
     }
 }
