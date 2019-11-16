@@ -104,6 +104,13 @@ namespace Connect4.Controllers
                 }
             }
 
+            user.Nascimento = model.Nascimento;
+            var update = await _userManager.UpdateAsync(user);
+            if (!update.Succeeded)
+            {
+                throw new ApplicationException($"Erro ao atualizar o usuário com o ID '{user.Id}'.");
+            }
+
             StatusMessage = "Your profile has been updated";
             return RedirectToAction(nameof(Index));
         }

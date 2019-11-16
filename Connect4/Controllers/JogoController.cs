@@ -85,15 +85,19 @@ namespace Connect4.Controllers
         public IActionResult CriarJogo()
         {
             Jogo jogo;
-            JogadorPessoa jogadorAtual =
-                _userManager.GetUserAsync(User).Result.Jogador;
+            int? jogadorId =
+                _userManager.GetUserAsync(User).Result.JogadorId;
+            var jogadorAtual = _context.JogadorPessoas.Find(jogadorId);
+            if (jogadorAtual == null || jogadorAtual.Id == 0)
+            {
+                return NotFound();
+            }
             //Verificar se existe jogo com um jogador
             jogo = (from item in _context.Jogos.Include(j=> j.Jogador1)
                                                .Include(j => j.Jogador2)
                     where (item.Jogador1 == null ||
                          item.Jogador2 == null)
                     select item).FirstOrDefault();
-
             if (jogo != null) {
                 if (jogo.Jogador1 == null)
                 {
