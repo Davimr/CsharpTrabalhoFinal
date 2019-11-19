@@ -71,14 +71,14 @@ namespace Connect4.Controllers
         [HttpPost(Name = "Jogar")]
         [Route("Jogar")]
         //(...)/Jogar?Jogador=1&Pos=4
-        public Tabuleiro Jogar([FromBody] Tabuleiro t, 
+        public IActionResult Jogar([FromBody] Tabuleiro t, 
             [FromQuery]int Jogador, 
             [FromQuery]int Pos)
         {
             t.Jogar(Jogador, Pos);
             _context.Attach(t);
             _context.SaveChanges();
-            return t;
+            return Ok(t);
         }
     }
 }

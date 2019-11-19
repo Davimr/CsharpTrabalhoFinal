@@ -27,8 +27,7 @@ namespace Connect4.Data
         public DbSet<Connect4.Models.JogadorComputador> JogadorComputador  { get; set; }
         public DbSet<Connect4.Models.JogadorPessoa> JogadorPessoas { get; set; }
         public DbSet<Connect4.Models.Tabuleiro> Tabuleiros { get; set; }
-
-
         public DbSet<Connect4.Models.Jogo> Jogos { get; set; }
+
     }
 }

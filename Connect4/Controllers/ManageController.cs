@@ -71,11 +71,11 @@ namespace Connect4.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(IndexViewModel model)
+        public async Task<IActionResult> Index(IndexViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return View(viewModel);
             }
 
             var user = await _userManager.GetUserAsync(User);
@@ -85,9 +85,9 @@ namespace Connect4.Controllers
             }
 
             var email = user.Email;
-            if (model.Email != email)
+            if (viewModel.Email != email)
             {
-                var setEmailResult = await _userManager.SetEmailAsync(user, model.Email);
+                var setEmailResult = await _userManager.SetEmailAsync(user, viewModel.Email);
                 if (!setEmailResult.Succeeded)
                 {
                     throw new ApplicationException($"Unexpected error occurred setting email for user with ID '{user.Id}'.");
@@ -95,16 +95,17 @@ namespace Connect4.Controllers
             }
 
             var phoneNumber = user.PhoneNumber;
-            if (model.PhoneNumber != phoneNumber)
+            if (viewModel.PhoneNumber != phoneNumber)
             {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, model.PhoneNumber);
+                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, viewModel.PhoneNumber);
                 if (!setPhoneResult.Succeeded)
                 {
                     throw new ApplicationException($"Unexpected error occurred setting phone number for user with ID '{user.Id}'.");
                 }
             }
 
-            user.Nascimento = model.Nascimento;
+            user.Nome = viewModel.Nome;
+            user.Nascimento = viewModel.Nascimento;
             var update = await _userManager.UpdateAsync(user);
             if (!update.Succeeded)
             {

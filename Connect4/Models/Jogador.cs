@@ -8,5 +8,7 @@ namespace Connect4.Models
     public abstract class Jogador
     {
         public int Id { get; set; }
+
+        //public abstract String Nome { get; }
     }
 }

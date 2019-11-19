@@ -45,7 +45,7 @@ namespace Connect4.Models
                 {
                     for (var linha = 0; linha < RepresentacaoTabuleiro.GetLength(1); linha++)
                     {
-                        internalData = RepresentacaoTabuleiro[coluna, linha] + ";";
+                        internalData += RepresentacaoTabuleiro[coluna, linha] + ";";
                     }
                 }
                 return internalData;
@@ -57,7 +57,7 @@ namespace Connect4.Models
                 RepresentacaoTabuleiro = new int[int.Parse(valores[0]), int.Parse(valores[1])];
                 for (var coluna = 0; coluna < RepresentacaoTabuleiro.GetLength(0); coluna++)
                 {
-                    for (var linha = 0; linha < RepresentacaoTabuleiro.GetLength(0); linha++)
+                    for (var linha = 0; linha < RepresentacaoTabuleiro.GetLength(1); linha++)
                     {
                         RepresentacaoTabuleiro[coluna, linha] = int.Parse(valores[2 + (coluna * RepresentacaoTabuleiro.GetLength(1)) + linha]);
                     }

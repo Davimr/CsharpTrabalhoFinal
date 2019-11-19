@@ -87,6 +87,10 @@ namespace Connect4.Controllers
             Jogo jogo;
             int? jogadorId =
                 _userManager.GetUserAsync(User).Result.JogadorId;
+            if(jogadorId == null)
+            {
+                throw new ApplicationException("O usuário atual não é um jogador.");
+            }
             var jogadorAtual = _context.JogadorPessoas.Find(jogadorId);
             if (jogadorAtual == null || jogadorAtual.Id == 0)
             {
