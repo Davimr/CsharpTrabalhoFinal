@@ -5,6 +5,9 @@
 h1 {
     margin-bottom: 60px;
 }
+div.Turno {
+    border: 5px solid darkblue;
+}
 
 div.tabuleiro {
     margin: 0 auto 30px auto;

@@ -40,7 +40,7 @@ function CriarTabuleiro(colunas, linhas) {
 function obterJogoServidor() {
     var xhttp = new XMLHttpRequest();
     xhttp.responseType = 'json'
-    var URLObterJogo = "api/Jogo/Obter"
+    var URLObterJogo = "/api/Jogo/Obter"
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4) {
             if (this.response == null &&

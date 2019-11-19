@@ -100,7 +100,9 @@ namespace Connect4.Controllers
             jogo = (from item in _context.Jogos.Include(j=> j.Jogador1)
                                                .Include(j => j.Jogador2)
                     where (item.Jogador1 == null ||
-                         item.Jogador2 == null)
+                         item.Jogador2 == null) &&
+                         (item.Jogador1 != jogadorAtual &&
+                         item.Jogador2!= jogadorAtual)
                     select item).FirstOrDefault();
             if (jogo != null) {
                 if (jogo.Jogador1 == null)
