@@ -12,6 +12,7 @@ function AtualizarPosicao(coluna, linha, valor) {
         posicaoDiv.classList.add('Jogador2');
     }
 }
+var jogoId;
 function CriarLinha(colunas) {
     var linha = document.createElement('div');
     linha.classList.add('row');
@@ -20,10 +21,12 @@ function CriarLinha(colunas) {
         posicaoDiv.id = 'posCol-' + i;
         posicaoDiv.classList.add('square');
         linha.appendChild(posicaoDiv);
-    }
-
+    }    
     return linha;
 }
+
+
+
 
 function CriarTabuleiro(colunas, linhas) {
     tabuleiroDiv = document.getElementById("Tabuleiro");
@@ -35,12 +38,33 @@ function CriarTabuleiro(colunas, linhas) {
     }
 }
 
-
-
-function obterJogoServidor() {
+function jogarServidor(jogoId, posicao) {
     var xhttp = new XMLHttpRequest();
     xhttp.responseType = 'json'
-    var URLObterJogo = "/api/Jogo/Obter"
+    var URLObterJogo = "/api/Jogo/Jogar?JogoId=" + jogoId
+        + "&Pos=" + posicao
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4) {
+            if (this.response == null &&
+                this.responseURL != "") {
+                window.location.replace(this.responseURL);
+            }
+            if (this.status == 200) {
+                MontarTabuleiro(this.response);
+            }
+        }
+    };
+    //Prepara uma chamada GET no Servidor.
+    xhttp.open("GET", URLObterJogo, true);
+    //Envia a chamada.
+    xhttp.send();
+}
+
+
+function obterJogoServidor(id) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.responseType = 'json'
+    var URLObterJogo = "/api/Jogo/Obter/" + id
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4) {
             if (this.response == null &&
@@ -66,5 +90,15 @@ function MontarTabuleiro(Tabuleiro) {
         for (linha = 0; linha < TamanhoLinhas; linha++) {
             AtualizarPosicao(coluna, linha, Tabuleiro.representacaoTabuleiro[coluna][linha]);
         }
+        
     }
+    $(document).ready(function () {
+        for (coluna = 0; coluna < TamanhoColunas; coluna++) {       
+            $("#posCol-" + coluna).click(function () {
+                jogarServidor(jogoId, coluna);
+            });
+        });    
+    }
+    
+
 }

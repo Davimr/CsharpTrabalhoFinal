@@ -1,4 +1,4 @@
-﻿
+﻿@model Jogo
 @{
     ViewData["Title"] = "Tabuleiro";
 }
@@ -27,7 +27,8 @@
 @section Scripts{
     <script src="~/js/tabuleiro.js"></script>
     <script>
-        obterJogoServidor();
+        jogoId = "@Model.Id";
+        obterJogoServidor(jogoId);
     </script>
 }
 
