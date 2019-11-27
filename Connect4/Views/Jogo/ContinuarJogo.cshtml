@@ -1,4 +1,4 @@
-﻿@model Jogo
+﻿@model JogadorPessoa
 
 @using Microsoft.AspNetCore.Identity
 
@@ -6,7 +6,7 @@
 @inject UserManager<ApplicationUser> UserManager
 
 @{
-    ViewData["Title"] = "Continuar jogo";
+    ViewData["Title"] = "ContinuarJogo";
 }
 
 <h2>Continuar</h2>
@@ -27,66 +27,42 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => modelItem.Id)
-            </td>
-            <td>
-                @if (SignInManager.IsSignedIn(User))
-                {
-                    @Html.DisplayFor(modelItem => modelItem.Jogador1.Nome)
-                }
-            </td>
-            <td>
-                @if (SignInManager.IsSignedIn(User))
-                {
-                    @Html.DisplayFor(modelItem => modelItem.Jogador2.Nome)
-                }
+        @foreach (var item in Model.Jogos)
+        {
+            @if (item.Tabuleiro.Vencedor() != 0 || (!item.Jogador2Id.HasValue))
+            {
+                break;
+            }
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        @Html.DisplayFor(modelItem => item.Jogador1.Nome)
+                    }
+                </td>
+                <td>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        @Html.DisplayFor(modelItem => item.Jogador2.Nome)
+                    }
 
-            </td>
-            <td>
-
-                @if (SignInManager.IsSignedIn(User))
-                {
-                    <a asp-action="Jogar" asp-route-id="@Model.Id">Jogar</a>
-                }
-            </td>
-        </tr>
-
-    </tbody>
+                </td>
+                <td>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <a asp-area="" asp-controller="Jogo"
+                           asp-action="Tabuleiro"
+                           asp-route-id="@item.Id">Jogar</a>
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
 </table>
 
 
-<span style="font-weight: bold;">Jogador 1:</span>
-@if (Model.Jogador1 == null)
-{
-    <span>ESPERANDO O ADVERSÁRIO</span>
-}
-else
-{
-    <span>@Model.Jogador1.Nome</span>
-}
 
-<br />
 
-<span style="font-weight: bold;">Jogador 2:</span>
-@if (Model.Jogador2 == null)
-{
-    <span>ESPERANDO O ADVERSÁRIO</span>
-}
-else
-{
-    <span>@Model.Jogador2.Nome</span>
-}
-
-<br />
-<br />
-
-@if (Model.Jogador1Id != null && Model.Jogador2Id != null)
-{
-    //É utilizado jogador1Id para evitar problemas caso o controller
-    //não tenha incluído (include) explicitamente a propriedade Jogador
-    <a asp-area="" asp-controller="Jogo"
-       asp-action="Tabuleiro"
-       asp-route-id="@Model.Id">Iniciar Jogo</a>
-}

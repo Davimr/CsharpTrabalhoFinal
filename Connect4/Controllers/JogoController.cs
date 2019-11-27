@@ -192,15 +192,16 @@ namespace Connect4.Controllers
                 throw new ApplicationException("O usuário atual não é valido.");
             }
             JogadorPessoa = (from item in _context.JogadorPessoas.Include(j => j.Usuario)
+
                              .Include(j => j.Jogos)
-                            where (item.Id == jogadorId)
+                             where (item.Id == jogadorId)
                             select item).FirstOrDefault();
 
             if (JogadorPessoa.Jogos.Any())
             {
-                return View(JogadorPessoa.Jogos);
+                return View(JogadorPessoa);
             }
-            return null;
+            return NotFound("Não existem jogos para este jogador");
         }
     }
 }
