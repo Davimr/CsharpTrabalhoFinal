@@ -1,4 +1,8 @@
-﻿@{
+﻿@model JogadorPessoa
+
+@inject UserManager<ApplicationUser> UserManager
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -9,8 +13,15 @@
 <div><h1>Connect - 4</h1></div>
 @if (SignInManager.IsSignedIn(User))
 {
-    <a asp-area="" 
-       asp-controller="Jogo" 
+    <a asp-area=""
+       asp-controller="Jogo"
        asp-action="CriarJogo">Criar Jogo</a>
+}
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <a asp-area=""
+       asp-controller="Jogo"
+       asp-action="ContinuarJogo">Continuar Jogo</a>
 }
 

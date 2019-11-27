@@ -61,6 +61,8 @@ namespace Connect4.Controllers
         {
             var jogo = _context.Jogos
                 .Include(j => j.Tabuleiro)
+                .Include(j =>  j.Jogador1)
+                .Include(j => j.Jogador2)
                 .Where(j => j.Id == id)
                 .FirstOrDefault();
 
@@ -103,13 +105,45 @@ namespace Connect4.Controllers
             {
                 return BadRequest();
             }
-            //TODO: Pegar o usuário autenticado. 
-            //Verificar se ele é o jogador 1 ou 2.
-            //Verificar se ele pode fazer a jogada.
-            //Por último executar a jogada ou exceção.
-            jogo.Tabuleiro.Jogar(jogo.Tabuleiro.Turno, Pos);
-            _context.SaveChanges();
-            return Ok(jogo.Tabuleiro);
+            //TODO: Pegar o usuário autenticado. DONE
+            //Verificar se ele é o jogador 1 ou 2. DONE
+            //Verificar se ele pode fazer a jogada. DONE
+            //Por último executar a jogada ou exceção. DONE
+            int? jogadorId =
+                _userManager.GetUserAsync(User).Result.JogadorId;
+
+            if (jogadorId is null)
+            {
+                return NotFound();
+            }
+            if (jogadorId == jogo.Jogador1Id)
+            {
+                if (jogadorId == jogo.Tabuleiro.Turno)
+                {
+                    jogo.Tabuleiro.Jogar(jogadorId.GetValueOrDefault(), Pos);
+                    _context.Attach(jogo.Tabuleiro);
+                    _context.SaveChanges();
+                    return Ok(jogo.Tabuleiro);
+                }
+                else
+                {
+                    return Forbid();
+                }
+            }
+            else
+            {
+                if (jogadorId == jogo.Tabuleiro.Turno)
+                {
+                    jogo.Tabuleiro.Jogar(jogadorId.GetValueOrDefault(), Pos);
+                    _context.Attach(jogo.Tabuleiro);
+                    _context.SaveChanges();
+                    return Ok(jogo.Tabuleiro);
+                }
+                else
+                {
+                    return Forbid();
+                }
+            }
         }
     }
 }

@@ -18,6 +18,7 @@ namespace Connect4.Models
 
         [ForeignKey("Jogador")]
         public int? JogadorId { get; set; }
+
         public JogadorPessoa Jogador { get; set; } 
             = new JogadorPessoa();
     }

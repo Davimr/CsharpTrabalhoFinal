@@ -53,6 +53,20 @@ namespace Connect4.Controllers
             {
                 return NotFound();
             }
+            if (jogo.Jogador1 is JogadorPessoa)
+            {
+                jogo.Jogador1 = _context.JogadorPessoas
+                                .Include(j => j.Usuario)
+                                .Where(j => j.Id == jogo.Jogador1Id)
+                                .FirstOrDefault();
+            }
+            if (jogo.Jogador2 is JogadorPessoa)
+            {
+                jogo.Jogador2 = _context.JogadorPessoas
+                                .Include(j => j.Usuario)
+                                .Where(j => j.Id == jogo.Jogador2Id)
+                                .FirstOrDefault();
+            }
             if (jogo.Tabuleiro == null)
             {
                 jogo.Tabuleiro = new Tabuleiro();
@@ -108,6 +122,8 @@ namespace Connect4.Controllers
         /// <returns>Redireciona o usuário para o Lobby.</returns>
         public IActionResult CriarJogo()
         {
+            JogadorPessoa jogador1pessoa = new JogadorPessoa();
+            JogadorPessoa jogador2pessoa = new JogadorPessoa();
             Jogo jogo;
             int? jogadorId =
                 _userManager.GetUserAsync(User).Result.JogadorId;
@@ -135,18 +151,56 @@ namespace Connect4.Controllers
                 }else if(jogo.Jogador2 == null)
                 {
                     jogo.Jogador2 = jogadorAtual;
+                    if (jogo.Jogador2 is JogadorPessoa)
+                    {
+                        jogador2pessoa = _context.JogadorPessoas
+                                        .Include(j => j.Usuario)
+                                        .Where(j => j.Id == jogo.Jogador2.Id)
+                                        .FirstOrDefault();
+                    }
+                    jogador2pessoa.Jogos.Add(jogo);
                 }
             }
             //Caso contrário
             else {
                 jogo = new Jogo();
                 jogo.Jogador1 = jogadorAtual;
+                if (jogo.Jogador1 is JogadorPessoa)
+                {
+                    jogador1pessoa = _context.JogadorPessoas
+                                    .Include(j => j.Usuario)
+                                    .Where(j => j.Id == jogo.Jogador1.Id)
+                                    .FirstOrDefault();
+                }
                 _context.Add(jogo);
             }
+            _context.SaveChanges();
+            jogador1pessoa.Jogos.Add(jogo);
             _context.SaveChanges();
             //Redirecionar para Lobby
             return RedirectToAction(nameof(Lobby), 
                 new { id = jogo.Id });
+        }
+
+        public JogadorPessoa ContinuarJogo()
+        {
+            JogadorPessoa JogadorPessoa;
+            int? jogadorId =
+                _userManager.GetUserAsync(User).Result.JogadorId;
+            if (jogadorId == null)
+            {
+                throw new ApplicationException("O usuário atual não é valido.");
+            }
+            JogadorPessoa = (from item in _context.JogadorPessoas.Include(j => j.Usuario)
+                             .Include(j => j.Jogos)
+                            where (item.Id == jogadorId)
+                            select item).FirstOrDefault();
+
+            if (JogadorPessoa.Jogos.Any())
+            {
+                return JogadorPessoa;
+            }
+            return null;
         }
     }
 }
