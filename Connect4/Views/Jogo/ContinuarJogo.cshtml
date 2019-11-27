@@ -2,13 +2,60 @@
 
 @using Microsoft.AspNetCore.Identity
 
+@inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
 @{
-    ViewData["Title"] = "Lobby";
+    ViewData["Title"] = "Continuar jogo";
 }
 
-<h2>Lobby</h2>
+<h2>Continuar</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <span>ID jogo: </span>
+            </th>
+            <th>
+                <span>Jogador 1: </span>
+            </th>
+            <th>
+                <span>Jogador 2: </span>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.Id)
+            </td>
+            <td>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    @Html.DisplayFor(modelItem => modelItem.Jogador1.Nome)
+                }
+            </td>
+            <td>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    @Html.DisplayFor(modelItem => modelItem.Jogador2.Nome)
+                }
+
+            </td>
+            <td>
+
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <a asp-action="Jogar" asp-route-id="@Model.Id">Jogar</a>
+                }
+            </td>
+        </tr>
+
+    </tbody>
+</table>
+
 
 <span style="font-weight: bold;">Jogador 1:</span>
 @if (Model.Jogador1 == null)
@@ -22,7 +69,7 @@ else
 
 <br />
 
-    <span style="font-weight: bold;">Jogador 2:</span>
+<span style="font-weight: bold;">Jogador 2:</span>
 @if (Model.Jogador2 == null)
 {
     <span>ESPERANDO O ADVERSÁRIO</span>

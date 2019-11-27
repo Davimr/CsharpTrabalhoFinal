@@ -182,7 +182,7 @@ namespace Connect4.Controllers
                 new { id = jogo.Id });
         }
 
-        public JogadorPessoa ContinuarJogo()
+        public IActionResult ContinuarJogo()
         {
             JogadorPessoa JogadorPessoa;
             int? jogadorId =
@@ -198,7 +198,7 @@ namespace Connect4.Controllers
 
             if (JogadorPessoa.Jogos.Any())
             {
-                return JogadorPessoa;
+                return View(JogadorPessoa.Jogos);
             }
             return null;
         }
