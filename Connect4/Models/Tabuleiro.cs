@@ -27,6 +27,12 @@ namespace Connect4.Models
         [NotMapped]
         public int[,] RepresentacaoTabuleiro { get; set; }
 
+        public int TVencedor {
+            get
+            {
+                return Vencedor();
+            }
+        }
 
         /// <summary>
         /// Não é possível para o Entity Framework mapear um array multidimensional.

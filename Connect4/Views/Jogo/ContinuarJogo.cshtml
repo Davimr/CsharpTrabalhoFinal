@@ -29,10 +29,6 @@
     <tbody>
         @foreach (var item in Model.Jogos)
         {
-            @if (item.Tabuleiro.Vencedor() != 0 || (!item.Jogador2Id.HasValue))
-            {
-                break;
-            }
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Id)
@@ -53,9 +49,18 @@
                 <td>
                     @if (SignInManager.IsSignedIn(User))
                     {
-                        <a asp-area="" asp-controller="Jogo"
-                           asp-action="Tabuleiro"
-                           asp-route-id="@item.Id">Jogar</a>
+                        @if (item.Jogador2Id.HasValue)
+                        {
+                            @if (item.Tabuleiro != null)
+                            {
+                                @if (item.Tabuleiro.TVencedor == 0)
+                                {
+                                    <a asp-area="" asp-controller="Jogo"
+                                       asp-action="Tabuleiro"
+                                       asp-route-id="@item.Id">Jogar</a>
+                                }
+                            }
+                        }
                     }
                 </td>
             </tr>

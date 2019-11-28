@@ -8,6 +8,7 @@ namespace Connect4.Data.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            /*
             migrationBuilder.DropForeignKey(
                 name: "FK_Jogador_AspNetUsers_UsuarioId",
                 table: "Jogador");
@@ -30,10 +31,12 @@ namespace Connect4.Data.Migrations
                 column: "JogadorId",
                 unique: true,
                 filter: "[JogadorId] IS NOT NULL");
+                */
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            /*
             migrationBuilder.DropIndex(
                 name: "IX_AspNetUsers_JogadorId",
                 table: "AspNetUsers");
@@ -60,6 +63,7 @@ namespace Connect4.Data.Migrations
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
+                */
         }
     }
 }
