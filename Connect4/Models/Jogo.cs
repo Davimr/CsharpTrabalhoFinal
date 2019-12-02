@@ -12,7 +12,7 @@ namespace Connect4.Models
         [ForeignKey("Jogador1")]
         public int? Jogador1Id { get; set; }
         public Jogador Jogador1 { get; set; }
-
+            
         [ForeignKey("Jogador2")]
         public int? Jogador2Id { get; set; }
 

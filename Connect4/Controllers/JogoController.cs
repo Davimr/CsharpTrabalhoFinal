@@ -123,9 +123,8 @@ namespace Connect4.Controllers
         /// <returns>Redireciona o usuário para o Lobby.</returns>
         public IActionResult CriarJogo()
         {
-            JogadorPessoa jogador1pessoa = new JogadorPessoa();
-            JogadorPessoa jogador2pessoa = new JogadorPessoa();
-            Jogo jogo;
+            JogadorPessoa jogadorPessoa1 = null;
+            Jogo jogo = null;
             int? jogadorId =
                 _userManager.GetUserAsync(User).Result.JogadorId;
             if(jogadorId == null)
@@ -151,47 +150,25 @@ namespace Connect4.Controllers
                     jogo.Jogador1 = jogadorAtual;
                 }else if(jogo.Jogador2 == null)
                 {
+                    //jogadorPessoa1 = (from item in _context.JogadorPessoas.Include(j => j.Usuario)
+                    //                  where (item.Id == jogo.Jogador1Id)
+                    //                  select item).FirstOrDefault();
+
+                    //Jogo jogoAtual = jogadorPessoa1.Jogos.Where(j => j.Id == jogo.Id).FirstOrDefault();
+
+                    //jogoAtual.Jogador2 = jogadorAtual;
+
                     jogo.Jogador2 = jogadorAtual;
-                    if (jogo.Jogador2 is JogadorPessoa)
-                    {
-                        jogador2pessoa = _context.JogadorPessoas
-                                        .Include(j => j.Usuario)
-                                        .Where(j => j.Id == jogo.Jogador2.Id)
-                                        .FirstOrDefault();
-
-                        if (jogo.Jogador1 is JogadorPessoa)
-                        {
-                            jogador1pessoa = _context.JogadorPessoas.Include(j => j.Usuario).Include(j => j.Jogos)
-                                            .Where(j => j.Id == jogo.Jogador1Id)
-                                            .FirstOrDefault();
-                        }
-                    }
-
-                    if (jogador2pessoa.Jogos.Contains(jogo))
-                    {
-                        jogador2pessoa.Jogos.Remove(jogo);
-                    }
-                    jogador2pessoa.Jogos.Add(jogo);
                 }
             }
             //Caso contrário
             else {
                 jogo = new Jogo();
                 jogo.Jogador1 = jogadorAtual;
-                if (jogo.Jogador1 is JogadorPessoa)
-                {
-                    jogador1pessoa = _context.JogadorPessoas
-                                    .Include(j => j.Usuario)
-                                    .Where(j => j.Id == jogo.Jogador1.Id)
-                                    .FirstOrDefault();
-                }
                 _context.Add(jogo);
             }
-            if (jogador1pessoa.Jogos.Contains(jogo))
-            {
-                jogador1pessoa.Jogos.Remove(jogo);
-            }
-            jogador1pessoa.Jogos.Add(jogo);
+                jogadorAtual.Jogos.Add(jogo);
+
             _context.SaveChanges();
             //Redirecionar para Lobby
             return RedirectToAction(nameof(Lobby), 
@@ -201,26 +178,31 @@ namespace Connect4.Controllers
         [Authorize]
         public IActionResult ContinuarJogo()
         {
-            JogadorPessoa JogadorPessoa;
+            JogadorPessoa Jpessoa;
+            List<Jogo> Jogos;
             int? jogadorId =
                 _userManager.GetUserAsync(User).Result.JogadorId;
             if (jogadorId == null)
             {
                 throw new ApplicationException("O usuário atual não é valido.");
             }
-            JogadorPessoa = (from item in _context.JogadorPessoas.Include(j => j.Usuario)
-                             .Include(j => j.Jogos)
-                             .ThenInclude(i => i.Tabuleiro)
-                             where (item.Id == jogadorId)
-                            select item).FirstOrDefault();
+            Jogos = (from item in _context.Jogos.Include(j => j.Tabuleiro)
+                             .Include(j => j.Jogador1)
+                             .Include(j => j.Jogador2)
+                     where (item.Jogador1Id != null || item.Jogador2Id != null)
+                     select (item)).ToList();
+
+            Jpessoa = _context.JogadorPessoas.Find(jogadorId);
+
+            Jpessoa.Jogos = Jogos;
 
 
             //Precisei criar outra lista de jogos porque nao da pra alterar um jogo que variavel de iteracao do for each
             var LstJogos = new List<Jogo>();
 
-            foreach (var jogo in JogadorPessoa.Jogos)
+            foreach (var jogo in Jpessoa.Jogos)
             {
-                var jogoCompleto = new Jogo();
+                Jogo jogoCompleto = null;
 
                 jogoCompleto = _context.Jogos
                 .Include(j => j.Jogador1)
@@ -250,8 +232,8 @@ namespace Connect4.Controllers
 
             if (LstJogos.Any())
             {
-                JogadorPessoa.Jogos = LstJogos;
-                return View(JogadorPessoa);
+                Jpessoa.Jogos = LstJogos;
+                return View(Jpessoa);
             }
             return NotFound("Não existem jogos para este jogador");
         }

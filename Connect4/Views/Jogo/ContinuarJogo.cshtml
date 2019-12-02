@@ -51,14 +51,11 @@
                     {
                         @if (item.Jogador2Id.HasValue)
                         {
-                            @if (item.Tabuleiro != null)
+                            @if (item.Tabuleiro.TVencedor == 0)
                             {
-                                @if (item.Tabuleiro.TVencedor == 0)
-                                {
-                                    <a asp-area="" asp-controller="Jogo"
-                                       asp-action="Tabuleiro"
-                                       asp-route-id="@item.Id">Jogar</a>
-                                }
+                                <a asp-area="" asp-controller="Jogo"
+                                    asp-action="Tabuleiro"
+                                    asp-route-id="@item.Id">Jogar</a>
                             }
                         }
                     }

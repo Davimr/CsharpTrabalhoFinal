@@ -8,10 +8,11 @@ namespace Connect4.Models
 {
     public class JogadorPessoa : Jogador
     {
-        public IList<Jogo> Jogos { get; set; } = new List<Jogo>();
 
         [InverseProperty("Jogador")]
         public virtual ApplicationUser Usuario { get; set; }
+
+        public List<Jogo> Jogos { get; set; } = new List<Jogo>();
 
         public override string Nome {
             get {

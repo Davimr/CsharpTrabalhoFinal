@@ -12,9 +12,10 @@ using System;
 namespace Connect4.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191202224718_aula1947")]
+    partial class aula1947
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,13 +91,9 @@ namespace Connect4.Data.Migrations
                     b.Property<string>("Discriminator")
                         .IsRequired();
 
-                    b.Property<int?>("JogoId");
-
                     b.Property<int?>("TorneioId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("JogoId");
 
                     b.HasIndex("TorneioId");
 
@@ -309,10 +306,6 @@ namespace Connect4.Data.Migrations
 
             modelBuilder.Entity("Connect4.Models.Jogador", b =>
                 {
-                    b.HasOne("Connect4.Models.Jogo")
-                        .WithMany("Jogadores")
-                        .HasForeignKey("JogoId");
-
                     b.HasOne("Connect4.Models.Torneio")
                         .WithMany("Jogadores")
                         .HasForeignKey("TorneioId");
