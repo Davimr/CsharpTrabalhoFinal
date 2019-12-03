@@ -1,5 +1,4 @@
-﻿
-var tabuleiroDiv;
+﻿var tabuleiroDiv;
 var jogoId;
 
 //Função responsável por atualizar uma posição específica do tabuleiro no cliente.
@@ -27,8 +26,20 @@ function CriarLinha(colunas) {
         posicaoDiv.classList.add('square');
         linha.appendChild(posicaoDiv);
         posicaoDiv.click = function () { jogarServidor(jogoId, this.id.substr(7)); };
-    }    
+    }
     return linha;
+}
+
+function AtualizarTurno(jogadorAtual) {
+    var jogador1 = document.querySelector("#jogador1")
+    var jogador2 = document.querySelector("#jogador2")
+    if (jogadorAtual == 1) {
+        jogador2.classList.remove('Turno2')
+        jogador1.classList.add('Turno1')
+    } else if (jogadorAtual == 2) {
+        jogador1.classList.remove('Turno1')
+        jogador2.classList.add('Turno2')
+    }
 }
 
 
@@ -61,11 +72,13 @@ function jogarServidor(jogoId, posicao) {
     //Define qual o tipo de resposta, no caso um objeto JSON.
     xhttp.responseType = 'json';
     //Monta a URL que será invocada.
+    console.log("Posicao", posicao)
     var URLObterJogo = "/api/Jogo/Jogar?JogoId=" + jogoId
         + "&Pos=" + posicao;
+    console.log("Obter jogo",URLObterJogo)
     //Função que será invocada em uma modificação
     //no estado da chamada xhttp.
-
+        
     tabuleiroDiv.classList.add("disabled");
     xhttp.onreadystatechange = function () {
         //estado da chamada xhttp. 4 Significa done.
@@ -92,7 +105,7 @@ function jogarServidor(jogoId, posicao) {
 function obterJogoServidor(id) {
     //Faz uma chamada no servidor.
     var xhttp = new XMLHttpRequest();
-     //Define qual o tipo de resposta, no caso um objeto JSON.
+    //Define qual o tipo de resposta, no caso um objeto JSON.
     xhttp.responseType = 'json'
     //Monta a URL que será invocada.
     var URLObterJogo = "/api/Jogo/Obter/" + id
@@ -129,24 +142,24 @@ function MontarTabuleiro(Tabuleiro) {
     for (coluna = 0; coluna < TamanhoColunas; coluna++) {
         for (linha = 0; linha < TamanhoLinhas; linha++) {
             AtualizarPosicao(coluna, linha, Tabuleiro.representacaoTabuleiro[coluna][linha]);
-            $("#posCol-" + coluna).click(function () {
-                jogarServidor(jogoId, this.id.substr(7));
-            });
         }
-        
     }
-    //Adiciona um evento para no caso de ser clicado um dos espaços realizar uma jogada.    
-    /*for (coluna = 0; coluna < TamanhoColunas; coluna++) {
+    ///Adiciona um evento para no caso de ser clicado um dos espaços realizar uma jogada.    
+    for (coluna = 0; coluna < TamanhoColunas; coluna++) {
         $("#posCol-" + coluna).click(function () {
             jogarServidor(jogoId, this.id.substr(7));
         });
-    }*/
-    
-    
+    }
+
+
 
 }
+
+setInterval(function () {
+    obterJogoServidor(jogoId)
+}, 1000)
 /*
 $(document).ready(function () {
-    
-});  
+
+});
 */
