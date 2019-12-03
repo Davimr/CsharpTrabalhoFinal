@@ -89,6 +89,7 @@ namespace Connect4.Controllers
 
         [HttpPost(Name = "Jogar")]
         [Route("Jogar")]
+        [Authorize]
         //(...)/Jogar?JogoId=1&Pos=4
         public IActionResult Jogar([FromQuery] int JogoId, 
             [FromQuery]int Pos)

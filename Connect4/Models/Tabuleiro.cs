@@ -178,6 +178,10 @@ namespace Connect4.Models
                     ("A posição não pode ser " +
                     $"maior que {NUMERO_COLUNAS}.");
             }
+            if(TVencedor == 1 || TVencedor == 2 || TVencedor == -1)
+            {
+                throw new ArgumentException($"O jogo ja acabou.");
+            }
             int linha = 0;
             do
             {

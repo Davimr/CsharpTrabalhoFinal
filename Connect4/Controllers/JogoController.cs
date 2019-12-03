@@ -207,6 +207,7 @@ namespace Connect4.Controllers
                 jogoCompleto = _context.Jogos
                 .Include(j => j.Jogador1)
                 .Include(j => j.Jogador2)
+                .Include(j => j.Tabuleiro)
                 .Where(j => j.Id == jogo.Id)
                 .Select(j => j)
                 .FirstOrDefault();
