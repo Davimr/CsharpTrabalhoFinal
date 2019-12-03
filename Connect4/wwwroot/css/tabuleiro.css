@@ -69,3 +69,15 @@ div.Jogador1 {
 div.Jogador2 {
     background-image: radial-gradient(circle, red, red,darkred);
 }
+
+div.Turno1 {
+    border: 3px solid black;
+    background-image: radial-gradient(circle, yellow, yellow,orange)
+}
+
+div.Turno2 {
+    border: 3px solid black;
+    background-image: radial-gradient(circle, red, red,darkred);
+    color: white;
+}
+

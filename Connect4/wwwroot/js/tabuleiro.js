@@ -158,6 +158,7 @@ function MontarTabuleiro(Tabuleiro) {
 setInterval(function () {
     obterJogoServidor(jogoId)
 }, 1000)
+
 /*
 $(document).ready(function () {
 
