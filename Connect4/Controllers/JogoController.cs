@@ -229,6 +229,8 @@ namespace Connect4.Controllers
                                     .Where(j => j.Id == jogoCompleto.Jogador2Id)
                                     .FirstOrDefault();
                 }
+
+
             }
 
             if (LstJogos.Any())
