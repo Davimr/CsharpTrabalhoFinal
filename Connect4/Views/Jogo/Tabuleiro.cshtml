@@ -13,7 +13,7 @@
         <div id="mensagens" class="mensagens"></div>
     </div>
     <div class="row">
-        <div id="div1" class="div1 col-lg-6 Turno1">
+        <div id="div1" class="div1 col-lg-6">
             @if (Model.Jogador1 == null)
             {
                 <span>Usuario nao foi encontrado</span>
@@ -23,7 +23,7 @@
                 <span>@Model.Jogador1.Nome</span>
             }
         </div>
-        <div id="div2" class="div2 col-lg-6 Turno2">
+        <div id="div2" class="div2 col-lg-6">
             @if (Model.Jogador2 == null)
             {
                 <span>Usuario nao foi encontrado</span>

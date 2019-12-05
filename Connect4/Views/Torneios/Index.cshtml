@@ -60,8 +60,7 @@
                 }
             </td>
             <td>
-                @if (SignInManager.IsSignedIn(User) &&
-                   User.Identity.Name == item.Dono)
+                @if (SignInManager.IsSignedIn(User))
                 {
                     @Html.DisplayFor(modelItem => item.Inicio)
                 }
@@ -73,18 +72,16 @@
             </td>
             <td>
 
-                @if (SignInManager.IsSignedIn(User))
-                {
+
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                     <span>|</span>
-                }
+
 
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                @if (SignInManager.IsSignedIn(User))
-                {
+
                     <span>|</span>
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                }
+
             </td>
         </tr>
         }

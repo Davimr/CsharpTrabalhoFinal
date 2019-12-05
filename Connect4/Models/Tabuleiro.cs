@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Connect4.Data;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -17,7 +18,7 @@ namespace Connect4.Models
         public static int NUMERO_LINHAS = 6;
         private static int NUMERO_JOGADORES = 2;
 
-
+        private ApplicationDbContext _context { get; set; }
 
         /// <summary>
         /// 
@@ -180,7 +181,10 @@ namespace Connect4.Models
             }
             if(TVencedor == 1 || TVencedor == 2 || TVencedor == -1)
             {
-                throw new ArgumentException($"O jogo ja acabou.");
+                var vencedorNome = _context.JogadorPessoas
+                                    .Where(j => j.Id == TVencedor).Select(j => j.Nome)
+                                    .FirstOrDefault();
+                throw new ArgumentException($"O jogo ja acabou. E o vencedor foi :" + vencedorNome);
             }
             int linha = 0;
             do
