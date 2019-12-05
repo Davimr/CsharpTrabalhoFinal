@@ -57,7 +57,7 @@ namespace Connect4.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Create([Bind("Id,NomeTorneio,QuantidadeJogadores,Inicio")] Torneio torneio)
+        public async Task<IActionResult> Create([Bind("Id,NomeTorneio,QuantidadeJogadores,Premiacao,Inicio")] Torneio torneio)
         {
             if (ModelState.IsValid)
             {
@@ -90,7 +90,7 @@ namespace Connect4.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NomeTorneio,QuantidadeJogadores,Inicio")] Torneio torneio)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,NomeTorneio,QuantidadeJogadores,Premiacao,Inicio")] Torneio torneio)
         {
             if (id != torneio.Id)
             {

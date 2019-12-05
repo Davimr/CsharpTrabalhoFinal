@@ -51,7 +51,7 @@
                     {
                         @if (item.Jogador2Id.HasValue)
                         {
-                            @if (item.Tabuleiro.TVencedor == 0)
+                            @if (item.Tabuleiro == null || (item.Tabuleiro != null && item.Tabuleiro.TVencedor == 0))
                             {
                                 <a asp-area="" asp-controller="Jogo"
                                     asp-action="Tabuleiro"

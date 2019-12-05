@@ -23,21 +23,27 @@
         </dd>
         @if (SignInManager.IsSignedIn(User))
         {
-        <dt>
-            @Html.DisplayNameFor(model => model.QuantidadeJogadores)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.QuantidadeJogadores)
-        </dd>
-        @if (Model.Dono == User.Identity.Name)
-        {
-        <dt>
-            @Html.DisplayNameFor(model => model.Inicio)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Inicio)
-        </dd>
-        }
+            <dt>
+                @Html.DisplayNameFor(model => model.QuantidadeJogadores)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.QuantidadeJogadores)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Premiacao)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Premiacao)
+            </dd>
+            @if (Model.Dono == User.Identity.Name)
+            {
+                <dt>
+                    @Html.DisplayNameFor(model => model.Inicio)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Inicio)
+                </dd>
+            }
         }
     </dl>
 </div>

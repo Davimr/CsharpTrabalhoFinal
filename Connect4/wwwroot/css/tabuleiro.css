@@ -62,6 +62,7 @@ div.square {
         filter: brightness(65%);
     }
 
+
 div.Jogador1 {
     background-image: radial-gradient(circle, yellow, yellow,orange);
 }
@@ -72,12 +73,12 @@ div.Jogador2 {
 
 div.Turno1 {
     border: 3px solid black;
-    background-image: radial-gradient(circle, yellow, yellow,orange)
+    background-image: radial-gradient(circle, red, red,darkred)
 }
 
 div.Turno2 {
     border: 3px solid black;
-    background-image: radial-gradient(circle, red, red,darkred);
+    background-image: radial-gradient(circle, green, green,darkgreen);
     color: white;
 }
 

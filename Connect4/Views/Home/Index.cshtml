@@ -20,8 +20,10 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <a asp-area=""
-       asp-controller="Jogo"
-       asp-action="ContinuarJogo">Continuar Jogo</a>
+    <div style="margin-left: 20px; display: inline-block;">
+        <a asp-area=""
+           asp-controller="Jogo"
+           asp-action="ContinuarJogo">Continuar Jogo</a>
+    </div>
 }
 

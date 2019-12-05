@@ -14,6 +14,7 @@ function AtualizarPosicao(coluna, linha, valor) {
     } else if (valor == 2) {
         posicaoDiv.classList.add('Jogador2');
     }
+    AtualizarTurno(valor);
 }
 
 //Esta função cria uma linha na Div do Tabuleiro.
@@ -31,14 +32,18 @@ function CriarLinha(colunas) {
 }
 
 function AtualizarTurno(jogadorAtual) {
-    var jogador1 = document.querySelector("#jogador1")
-    var jogador2 = document.querySelector("#jogador2")
+    var jogador1 = document.getElementById("div1");
+    var jogador2 = document.getElementById("div2");
     if (jogadorAtual == 1) {
-        jogador2.classList.remove('Turno2')
+        jogador1.classList.remove('Turno2')
         jogador1.classList.add('Turno1')
+        jogador2.classList.remove('Turno1')
+        jogador2.classList.add('Turno2')
     } else if (jogadorAtual == 2) {
         jogador1.classList.remove('Turno1')
-        jogador2.classList.add('Turno2')
+        jogador1.classList.add('Turno2')
+        jogador2.classList.remove('Turno2')
+        jogador2.classList.add('Turno1')
     }
 }
 
@@ -84,15 +89,13 @@ function jogarServidor(jogoId, posicao) {
         //estado da chamada xhttp. 4 Significa done.
         if (this.readyState == 4) {
             tabuleiroDiv.classList.remove("disabled");
-            //Se a resposta for nula significa que algo falhou.
-            if (this.response == null &&
-                this.responseURL != "") {
-                window.location.replace(this.responseURL);
-            }
-            //Se o estado é 200 e a resposta não é nula montar o tabuleiro.
-            if (this.status == 200) {
+            if (this.response == null) {
+                alert('Não é sua vez de jogar.');
+            } else if (this.status == 200 && this.response != null) {
                 MontarTabuleiro(this.response);
             }
+            //Se o estado é 200 e a resposta não é nula montar o tabuleiro.
+
         }
     };
     //Prepara uma chamada GET no Servidor.
@@ -131,6 +134,7 @@ function obterJogoServidor(id) {
 
 //Função que monta um tabuleiro.
 function MontarTabuleiro(Tabuleiro) {
+
     tabuleiroObj = Tabuleiro;
     //Tamanho de colunas e linhas de acordo com o tamanho do tabuleiro.
     var TamanhoColunas = Tabuleiro.representacaoTabuleiro.length,
