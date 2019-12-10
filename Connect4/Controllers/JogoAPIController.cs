@@ -121,8 +121,16 @@ namespace Connect4.Controllers
             {
                 if (jogadorId == jogo.Tabuleiro.Turno)
                 {
+                    if(jogo.Tabuleiro.TVencedor == 1 || jogo.Tabuleiro.TVencedor == 2 || jogo.Tabuleiro.TVencedor == -1)
+                    {
+                        var nomeVencedor = _context.JogadorPessoas
+                                    .Include(j => j.Usuario)
+                                    .Where(j => j.Id == jogo.Tabuleiro.TVencedor).FirstOrDefault();
+
+                        throw new ArgumentException($"O jogo ja acabou. E o vencedor foi :" + nomeVencedor.Nome);
+                    }
                     jogo.Tabuleiro.Jogar(jogadorId.GetValueOrDefault(), Pos);
-                    _context.Attach(jogo.Tabuleiro);
+                    _context.Update(jogo.Tabuleiro);
                     _context.SaveChanges();
                     return Ok(jogo.Tabuleiro);
                 }
@@ -136,7 +144,7 @@ namespace Connect4.Controllers
                 if (jogadorId == jogo.Tabuleiro.Turno)
                 {
                     jogo.Tabuleiro.Jogar(jogadorId.GetValueOrDefault(), Pos);
-                    _context.Attach(jogo.Tabuleiro);
+                    _context.Update(jogo.Tabuleiro);
                     _context.SaveChanges();
                     return Ok(jogo.Tabuleiro);
                 }

@@ -18,6 +18,8 @@ namespace Connect4.Models
         public static int NUMERO_LINHAS = 6;
         private static int NUMERO_JOGADORES = 2;
 
+        private Controllers.JogoController _jogoController { get; }
+
         private ApplicationDbContext _context { get; set; }
 
         /// <summary>
@@ -165,6 +167,7 @@ namespace Connect4.Models
 
         public void Jogar(int Jogador, int Posicao)
         {
+            
             if(Jogador!= this.Turno)
             {
                 throw new ArgumentException($"Não é a vez do jogador {Jogador}");
@@ -179,13 +182,11 @@ namespace Connect4.Models
                     ("A posição não pode ser " +
                     $"maior que {NUMERO_COLUNAS}.");
             }
-            if(TVencedor == 1 || TVencedor == 2 || TVencedor == -1)
-            {
-                var vencedorNome = _context.JogadorPessoas
-                                    .Where(j => j.Id == TVencedor).Select(j => j.Nome)
-                                    .FirstOrDefault();
-                throw new ArgumentException($"O jogo ja acabou. E o vencedor foi :" + vencedorNome);
-            }
+            //if(TVencedor == 1 || TVencedor == 2 || TVencedor == -1)
+            //{
+            //    var nomeVencedor = _jogoController.verificarVencedor(TVencedor);
+            //    throw new ArgumentException($"O jogo ja acabou. E o vencedor foi :" + nomeVencedor);
+            //}
             int linha = 0;
             do
             {

@@ -240,5 +240,7 @@ namespace Connect4.Controllers
             }
             return NotFound("Não existem jogos para este jogador");
         }
+
+
     }
 }

@@ -1,0 +1,51 @@
+﻿@model Torneio
+
+@using Microsoft.AspNetCore.Identity
+
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Torneio";
+}
+
+<h2>Torneio</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <span>Jogo ID</span>
+            </th>
+            <th>
+                <span>Jogador 1</span>
+            </th>
+            <th>
+                <span>Jogador 2</span>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Jogos)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Jogador1Id)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Jogador2Id)
+            </td>
+
+
+            <td>
+                <a asp-action="Comecar" asp-route-id="@item.Id">Entrar</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

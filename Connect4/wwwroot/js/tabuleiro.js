@@ -86,8 +86,10 @@ function jogarServidor(jogoId, posicao) {
         
     tabuleiroDiv.classList.add("disabled");
     xhttp.onreadystatechange = function () {
+        console.log("fora do if");
         //estado da chamada xhttp. 4 Significa done.
         if (this.readyState == 4) {
+            console.log("dentro do if");
             tabuleiroDiv.classList.remove("disabled");
             if (this.response == null) {
                 alert('Não é sua vez de jogar.');
@@ -96,6 +98,8 @@ function jogarServidor(jogoId, posicao) {
             }
             //Se o estado é 200 e a resposta não é nula montar o tabuleiro.
 
+        } else {
+            console.log('caiu no else')
         }
     };
     //Prepara uma chamada GET no Servidor.
@@ -121,6 +125,7 @@ function obterJogoServidor(id) {
                 window.location.replace(this.responseURL);
             }
             if (this.status == 200) {
+                console.log("UIHSDFIUHSDF", this.response)
                 MontarTabuleiro(this.response);
             }
         }
@@ -148,8 +153,10 @@ function MontarTabuleiro(Tabuleiro) {
             AtualizarPosicao(coluna, linha, Tabuleiro.representacaoTabuleiro[coluna][linha]);
         }
     }
+    console.log('chegou no montar tabuleiro');
     ///Adiciona um evento para no caso de ser clicado um dos espaços realizar uma jogada.    
     for (coluna = 0; coluna < TamanhoColunas; coluna++) {
+        console.log('entrou no for de montar tabuleiro');
         $("#posCol-" + coluna).click(function () {
             jogarServidor(jogoId, this.id.substr(7));
         });
